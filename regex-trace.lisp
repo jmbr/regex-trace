@@ -17,7 +17,9 @@
   (let (trace-forms)
     (do-all-symbols (symbol)
       (let ((symbol-name (symbol-name symbol)))
-        (when (and (fboundp symbol) (cl-ppcre:scan regex symbol-name))
+        (when (and (fboundp symbol)
+                   (not (macro-function symbol))
+                   (cl-ppcre:scan regex symbol-name))
           (pushnew `(,action ,symbol ,@rest)
                    trace-forms :test #'equalp))))
     `(progn
